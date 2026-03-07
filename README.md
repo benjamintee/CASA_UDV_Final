@@ -6,7 +6,8 @@ This project applies network-based accessibility modelling to examine how access
 It integrates transport network modelling with school performance data and socioeconomic indicators to explore whether spatial accessibility reinforces educational inequality.
 
 ## Core Questions
-1. Main RQ: To what extent does the geographic distribution of high-performing secondary schools in London reflect and reinforce patterns of socio-economic inequality across neighbourhoods?
+
+Main RQ: To what extent does the geographic distribution of high-performing secondary schools in London reflect and reinforce patterns of socio-economic inequality across neighbourhoods?
 
 RQ 1 — Spatial Concentration:
 Are high-performing secondary schools (by Ofsted rating, Attainment 8 and Progress 8) disproportionately concentrated in particular boroughs or sub-regions of London, and does this pattern correlate with neighbourhood deprivation (IMD)?
