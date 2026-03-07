@@ -1,0 +1,63 @@
+School capacity
+Academic year 2023/24
+
+Description
+
+This document describes the data included in the ‘School Capacity: Academic Year 2023/24’ Official Statistics release’s underlying data files. This data is released under the terms of the Open Government License and is intended to meet at least 3 stars for Open Data.
+
+The methodology accompanying this release should be referenced alongside this data. It provides information on the data sources, their coverage and quality as well as explaining methodology used in producing the data.
+
+A description of how the school place planning estimates have been derived and how to interpret them is also provided in technical guidance document accompanying this release. Users should read this technical guidance to understand the practical applications and limitations of the data.
+
+Coverage
+
+This release reports on school capacity information in state-funded primary and secondary schools in England in the academic year 2023/24, as of 1 May 2024. Data are as reported by local authorities in the annual School Capacity (SCAP) Survey.
+
+Information is included on:
+
+• The numbers of primary and secondary school places from 2009/10 to 2023/24 , including unfilled school places and pupils in places that exceed their school's capacity (2019/20 data is not available due to the cancellation of the 2020 SCAP survey due to Covid-19);
+
+• Sixth form capacity in schools, where reported, from 2017/18 to 2023/24 (2019/20 data is not available due to the cancellation of the 2020 SCAP survey due to Covid-19);
+
+• Local authorities’ pupil forecasts up to 2028/29  at primary level and 2030/31 at secondary level; including places to be funded through housing developer contributions (HDCs) and housing infrastructure fund (HIF)
+
+• Local authority planned changes to school places to 2026/27, including additional, bulge (temporary additional places for large cohorts) and places to remove;
+
+• The department ‘s modelled estimate’s of future number of places needed, up to 2028/29 at primary level and 2030/31 at secondary level.
+
+This publication also includes Official Statistics in Development for special school capacity, the capacity of special educational needs (SEN) unit and resourced provision in mainstream schools, and local authority forecast demand for specialist provision.
+
+File formats and conventions
+
+The following conventions are used throughout the underlying data.
+‘z’ Not applicable.
+‘x’ Not available.
+
+Data files
+
+Capacity - school
+
+Filename: capacity_school_200910-202324.csv
+Geographic levels: School
+Time period: 2009/10 to 2023/24
+Content summary: Total number of school places, which includes sixth form places and excludes nursery places. Includes number of pupils on roll from the May 2024 School Census.
+
+Variable names and descriptions for this file are provided below:
+
+Variable name                 |  Variable description
+----------------------------  |  ------------------------------------------------------------------------------------
+percent_pupils_over_capacity  |  Pupils in places that exceed their school's capacity as a percentage of total places
+percent_unfilled_places       |  Unfilled places as a percentage of total places
+pupils_on_roll                |  Number of pupils on roll
+pupils_over_capacity          |  Pupils in places that exceed their school's capacity
+school_places                 |  Number of school places
+unfilled_places               |  Unfilled places
+
+Footnotes:
+
+1. Includes mainstream state schools with capacity in any of the year groups from reception to year 11 on 1 May for the relevant academic year.
+2. Primary places include all reported capacity in primary and middle deemed primary schools. Capacity excludes nursery places.
+3. Secondary places include all reported capacity in secondary, middle-deemed secondary and all-through schools. Capacity includes sixth form places.
+4. Number of pupils on roll for reception year group and above. Taken from the May school census for the relevant academic year, or gathered during the school capacity collection if census data was not available for a school.
+5. 2019/20 data not available due to the cancellation of the 2020 School Capacity survey due to COVID-19.
+6. Number of pupils in places that exceed their school's capacity is the difference between school places and number of pupils on roll, for schools where the number of pupils on roll is higher than the school’s reported capacity. Calculated at school level and then summed to national, regional or local authority level.
