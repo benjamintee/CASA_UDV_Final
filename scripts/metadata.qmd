@@ -15,7 +15,7 @@ format:
 **Scope:** All open, state-funded secondary schools in England (\~3,200 schools)\
 **Geography:** England; filter `london_sub_region` for London analysis\
 **Last updated:** March 2026\
-**Compiled from:** GIAS, Ofsted, DfE KS4 Performance Tables, SCAP, IMD 2025
+**Compiled from:** GIAS, Ofsted, DfE KS4 Performance Tables, SCAP, IMD 2025, School Workforce in England
 
 ------------------------------------------------------------------------
 
@@ -217,6 +217,23 @@ IMD/IDACI deciles use a 1–10 scale: **1 = most deprived 10% nationally, 10 = l
 
 ------------------------------------------------------------------------
 
+## Section 10 — School Workforce (2024/25)
+
+*Source: DfE School Workforce in England — Pupil to teacher ratios, school level*\
+*Reporting Year 2024 (2024/25 academic year). Published June 2025.*\
+*https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/12849f4a-1427-4dc2-9f7a-e069087824aa*\
+*Coverage: State-funded schools in England. Figures are full-time equivalents (FTE).*
+
+| Variable name | Definition |
+|------------------------------------|------------------------------------|
+| `wf_pupils_fte` | The total number of pupils at the school, expressed as full-time equivalents (FTE). Part-time pupils are counted as a fraction of 1. This is the pupil count used to calculate teacher ratios. |
+| `wf_qualified_teachers_fte` | The number of qualified teachers at the school, expressed as full-time equivalents. A qualified teacher holds Qualified Teacher Status (QTS), the standard professional qualification to teach in state schools in England. |
+| `wf_teachers_fte` | The total number of teachers at the school, expressed as full-time equivalents. Includes both qualified teachers (with QTS) and unqualified teachers. |
+| `wf_pupil_to_qual_unqual_teacher_ratio` | The number of pupils for every one teacher (qualified and unqualified combined). For example, a ratio of 16 means there are 16 pupils per teacher. Lower values indicate more teaching resource per pupil. This is the primary workforce measure used in this database. |
+: {tbl-colwidths="[30,70]"}
+
+------------------------------------------------------------------------
+
 ## Coverage Notes
 
 | Issue | Detail |
@@ -227,4 +244,5 @@ IMD/IDACI deciles use a 1–10 scale: **1 = most deprived 10% nationally, 10 = l
 | SCAP coverage | SCAP is reported by local authorities and is not always complete. A small number of schools may be missing capacity data. |
 | IMD join | IMD data is matched to schools via their LSOA code from GIAS. Three schools had no LSOA code and therefore have no IMD data. IMD measures neighbourhood deprivation, not pupil deprivation — a school in a deprived area does not necessarily serve a deprived intake (see `intake_neighbourhood_gap`). |
 | Progress 8 availability | Progress 8 is only available for 2023/24. It will not be published for 2024/25 or 2025/26 due to disruption to Key Stage 2 baseline assessments during COVID-19. |
+| Workforce coverage | Workforce data covers state-funded schools only and is reported for 2024/25. A small number of schools may be missing values where the school is very new or where the workforce return was not submitted. FTE figures may differ slightly from headcount figures reported elsewhere. |
 : {tbl-colwidths="[30,70]"}

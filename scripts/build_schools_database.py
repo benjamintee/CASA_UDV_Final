@@ -25,6 +25,10 @@ Data Sources:
                Auto-downloaded to large/, cached as data/imd.parquet
                Published October 2025. Uses 2021 LSOA boundaries — matches GIAS directly.
 
+  6. Workforce - School Workforce in England — Pupil to teacher ratios, school level
+               Reporting Year 2024 (2024/25 academic year)
+               Auto-downloaded to large/, cached as data/workforce.parquet
+
 Caching strategy:
   large/   Raw CSVs as downloaded (large files, kept for reference / re-processing)
   data/    Parquet versions (fast to read, type-safe, compressed)
@@ -129,6 +133,17 @@ SOURCES = {
         ),
         "large":    "large/imd2025_file7.csv",
         "data":     "data/imd.parquet",
+        "encoding": "utf-8",
+    },
+    "workforce": {
+        # School Workforce in England — Pupil to teacher ratios, school level (2024/25)
+        # https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/12849f4a-1427-4dc2-9f7a-e069087824aa
+        "url": (
+            "https://explore-education-statistics.service.gov.uk"
+            "/data-catalogue/data-set/12849f4a-1427-4dc2-9f7a-e069087824aa/csv"
+        ),
+        "large":    "large/workforce_pupil_teacher_ratios_school.csv",
+        "data":     "data/workforce.parquet",
         "encoding": "utf-8",
     },
 }
@@ -750,6 +765,69 @@ def load_imd():
 
 
 # ==============================================================
+# STEP 6: School Workforce — Pupil:Teacher Ratios
+# ==============================================================
+
+def load_workforce():
+    """
+    School Workforce in England — Pupil to teacher ratios, school level.
+    Reporting Year 2024 (2024/25 academic year).
+    Published June 2025.
+
+    Source: DfE School Workforce in England
+    https://explore-education-statistics.service.gov.uk/data-catalogue/data-set/12849f4a-1427-4dc2-9f7a-e069087824aa
+
+    The file covers multiple years (2010/11–2024/25) and all school types.
+    Filtered to: time_period == 202425 (most recent year only).
+
+    Fields retained:
+      wf_pupils_fte                       Total full-time equivalent pupils
+      wf_qualified_teachers_fte           Full-time equivalent qualified teachers
+      wf_teachers_fte                     Full-time equivalent all teachers (qualified + unqualified)
+      wf_pupil_to_qual_unqual_teacher_ratio  Pupils per teacher (qualified and unqualified combined)
+    """
+    print("\n[6/6] Loading School Workforce — pupil:teacher ratios (2024/25)...")
+    df = ensure_parquet("workforce")
+    if df is None or df.empty:
+        return pd.DataFrame(columns=["URN"])
+
+    print(f"  Loaded {len(df):,} rows (all years, all school types)")
+    df = normalise_urn(df)
+
+    # Filter to most recent year only
+    year_col = next((c for c in df.columns
+                     if "time_period" in c.lower()), None)
+    if year_col:
+        df = df[df[year_col].astype(str).str.contains("202425", na=False)].copy()
+        print(f"  After 2024/25 filter: {len(df):,} rows")
+
+    rename = {
+        "pupils_fte":                          "wf_pupils_fte",
+        "qualified_teachers_fte":              "wf_qualified_teachers_fte",
+        "teachers_fte":                        "wf_teachers_fte",
+        "pupil_to_qual_unqual_teacher_ratio":  "wf_pupil_to_qual_unqual_teacher_ratio",
+    }
+    df = df.rename(columns={k: v for k, v in rename.items() if k in df.columns})
+
+    keep = [
+        "URN",
+        "wf_pupils_fte",
+        "wf_qualified_teachers_fte",
+        "wf_teachers_fte",
+        "wf_pupil_to_qual_unqual_teacher_ratio",
+    ]
+    df = select(df, keep, "Workforce")
+
+    for col in df.columns:
+        if col != "URN":
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    df = df.drop_duplicates("URN")
+    print(f"  Retained {len(df):,} schools, {len(df.columns)} fields")
+    return df
+
+
+# ==============================================================
 # DERIVED FIELDS
 # ==============================================================
 
@@ -824,11 +902,12 @@ def build_database():
     print(f"    data/   — parquet cache (fast reads on subsequent runs)")
 
     # Load all sources — each resolves via ensure_parquet()
-    gias   = load_gias()
-    ofsted = load_ofsted()
-    ks4    = load_ks4()
-    scap   = load_scap()
-    imd    = load_imd()
+    gias      = load_gias()
+    ofsted    = load_ofsted()
+    ks4       = load_ks4()
+    scap      = load_scap()
+    imd       = load_imd()
+    workforce = load_workforce()
 
     if gias is None or gias.empty or len(gias) <= 1:
         print(
@@ -840,9 +919,10 @@ def build_database():
     # Merge on URN
     print("\n[Merging on URN...]")
     db = gias.copy()
-    db = merge_report(db, ofsted, "Ofsted", "overall_effectiveness")
-    db = merge_report(db, ks4,    "KS4",    "ks4_attainment8")
-    db = merge_report(db, scap,   "SCAP",   "scap_utilisation_pct")
+    db = merge_report(db, ofsted,    "Ofsted",    "overall_effectiveness")
+    db = merge_report(db, ks4,       "KS4",       "ks4_attainment8")
+    db = merge_report(db, scap,      "SCAP",      "scap_utilisation_pct")
+    db = merge_report(db, workforce, "Workforce", "wf_pupil_to_qual_unqual_teacher_ratio")
 
     # Join IMD 2025 on lsoa_code (2021 boundaries — matches GIAS directly, no lookup needed)
     if imd is not None and "lsoa_code" in db.columns:
