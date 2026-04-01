@@ -68,13 +68,23 @@ schools_gdf = gpd.GeoDataFrame(
     crs="EPSG:27700"
 )
 
+# --- FILTER SCHOOLS IN GREATER LONDON WITH 5KM BUFFER HERE ---
 schools_buffered = gpd.clip(schools_gdf, gla_buffered).copy()
 print(f"  {len(schools_buffered):,} schools within {BUFFER_M/1000:.0f}km of GLA")
 
+# --- FILTER SCHOOLS IN LONDON HERE ---
 london_mask = schools_buffered["london_sub_region"].isin(
     ["Inner London", "Outer London"])
 london_schools = schools_buffered[london_mask]
 print(f"  of which {len(london_schools):,} are London schools")
+
+# --- FILTER SCHOOLS WITHOUT SELECTIVE ADMISSION HERE ---
+excluded_policies = ["Selective", "Not applicable"]
+schools_buffered = schools_buffered[~schools_buffered["admissions_policy"].isin(
+    excluded_policies)].copy()
+print(f"  {len(schools_buffered):,} schools remaining after excluding Selective/NA policies")
+
+# ------------------------------
 
 # ── 3. Build destinations GeoDataFrame ────────────────────────────────────────
 
@@ -101,6 +111,7 @@ print(
     f"  Top 25% Att8 (buffer)        : {(destinations['ks4_attainment8'] >= att8_threshold).sum()}")
 print(
     f"  Top 25% P8 (buffer)          : {(destinations['ks4_progress8'] >= p8_threshold).sum()}")
+
 
 school_tags = destinations.set_index("id")[[
     "ofsted_overall_label",
